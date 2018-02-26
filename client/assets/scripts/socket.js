@@ -22,9 +22,5 @@ function init(){
     console.log("init");
     connect();
 }
-function run(){
-    console.log("run");
-}
-//window.onload = init;
-window.onload = run();
+window.onload = init();
 console.log("execute");

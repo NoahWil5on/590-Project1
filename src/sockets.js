@@ -30,7 +30,7 @@ const onJoined = (sock) => {
   };
   users[num] = socket.player;
 
-  socket.emit('connection', socket.player);
+  socket.emit('join', socket.player);
 };
 const onMessage = (sock) => {
   const socket = sock;

@@ -3,9 +3,11 @@ let socket;
 let myNum;
 
 const connect = () => {
+    console.log("connect");
     socket = io.connect();
 
-    socket.on('connection', (player) => {
+    socket.on('join', (player) => {
+        console.log("join");
         myNum = player.playerNum;
         app.main.init(player);
         setInterval(() => {
@@ -17,6 +19,7 @@ const connect = () => {
     })
 }
 const init = () => {
+    console.log("init");
     connect();
 }
 window.onload = init;

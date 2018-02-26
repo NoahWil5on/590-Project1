@@ -18,7 +18,7 @@ const connect = () => {
         app.pong.updatePlayer2(player2);
     })
 }
-const init = () => {
+function init(){
     console.log("init");
     connect();
 }

@@ -38,10 +38,6 @@ const onMessage = (sock) => {
     socket.broadcast.to('room1').emit('update', player);
   });
 };
-const onDisconnect = (sock) => {
-  const socket = sock;
-  console.log(socket);
-};
 
 const configure = (ioServer) => {
   io = ioServer;
@@ -50,7 +46,6 @@ const configure = (ioServer) => {
   io.on('connection', (socket) => {
     onJoined(socket);
     onMessage(socket);
-    onDisconnect(socket);
 
     num++;
   });

@@ -9,7 +9,6 @@ app.main = {
     HEIGHT: 600,
 
     init: function(player){
-        console.log("app init");
         this.canvas = document.getElementById('canvas');
         this.canvas.width = this.WIDTH;
         this.canvas.height = this.HEIGHT;

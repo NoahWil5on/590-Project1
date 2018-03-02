@@ -25,6 +25,19 @@ function checkCollision(box,ball){
 
     return {x: false, y: false};
 }
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+}
+function pointInRect(point, rect){
+    if(point.x > rect.x && point.x < rect.x + rect.width){
+        if(point.y > rect.y && point.y < rect.y + rect.height) return true;
+    }
+    return false;
+}
 
 var Key = {
     pressed: {},
@@ -46,6 +59,7 @@ var Key = {
         delete this.pressed[event.keyCode];
     }
 };
+
 
 window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
 window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);

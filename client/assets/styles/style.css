@@ -18,3 +18,15 @@
     background-color: #000;
     position: fixed;
 }
+#info{
+    max-width: 30%;
+    margin: 0 auto;
+    text-align: center;
+}
+p{
+    color: white;
+    font-family: sans-serif;
+    font-size: 1.2em;
+    margin: 20px auto;
+    text-align: left;
+}

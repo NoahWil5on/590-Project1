@@ -1,8 +1,11 @@
 "use strict";
 
+//create or add to app
 var app = app || {};
 
 app.main = {
+
+    //all app.main fields
     canvas: undefined,
     ctx: undefined,
     WIDTH: 1000,
@@ -17,9 +20,9 @@ app.main = {
     mouseButton: false,
     mouseClick: false,
     lastMouse: false,
-    win: false,
     room: undefined,
-
+    winScore: 5,
+    streak: 0,
     GAME_STATE: {
         START: "start",
         GAME: "play",
@@ -27,34 +30,70 @@ app.main = {
     },
     currentState: undefined,
 
+    //intialize fields, most imporantly reset key values to reset the game
     init: function(player){
+        //setup canvas
         this.canvas = document.getElementById('canvas');
         this.canvas.width = this.WIDTH;
         this.canvas.height = this.HEIGHT;
 
+        //mouse event listeners
         this.canvas.addEventListener('mousemove', function(event) { app.main.mouse = getMousePos(app.main.canvas, event)});
         this.canvas.addEventListener('mouseup', function(event) { app.main.mouseButton = false});
         this.canvas.addEventListener('mousedown', function(event) { app.main.mouseButton = true});
 
         this.ctx = this.canvas.getContext('2d');
+
+        //initialize all other app components
         app.pong.init(player);
         app.start.init();
+        app.over.init();
 
         this.currentState = this.GAME_STATE.START;
         this.update();
     },
+    //used for resetting game if necessary
+    setup: function(){
+        this.host = false;
+        this.leftScore = 0;
+        this.rightScore = 0;
+        this.win = false;
+        this.room = undefined;
+    },
+    //route update calls depending on game state and updates various things
     update: function(){
+        //check if the mouse has just been clicked
         if(!this.lastMouse && this.mouseButton){
             this.mouseClick = true;
         }else{
             this.mouseClick = false;
         }
+        //update delta time
         this.currentTime = Date.now();
         this.dt = (this.currentTime - this.lastUpdate)/1000;
 
+        //clear screen
         this.clear();
+
+        //bind update to constant frame updates
         this.animationID = requestAnimationFrame(this.update.bind(this));
+
+        //draw thin green strokes across screen to give old age effect
         this.drawStrokes();
+
+        //checks if game has been won, updates streak count and game state accordingly
+        if(this.leftScore >= this.winScore || this.rightScore >= this.winScore){
+            if((this.host && this.leftScore >= this.winScore) ||
+            (!this.host && this.rightScore >= this.winScore)){
+                app.over.currentState = app.over.GAME_STATE.WIN
+                this.streak++;
+            }else{
+                this.streak = 0;
+            }
+            this.currentState = this.GAME_STATE.OVER;
+            this.leftScore = this.rightScore = 0;
+        }
+        //check which game state to update
         switch(this.currentState){
             case this.GAME_STATE.START:
                 app.start.update();
@@ -71,6 +110,7 @@ app.main = {
         this.lastUpdate = Date.now();
         this.lastMouse = this.mouseButton;
     },
+    //draw green strokes across screen
     drawStrokes: function(){
         this.ctx.save();
 
@@ -86,6 +126,7 @@ app.main = {
 
         this.ctx.restore();
     },
+    //clear screen each frame
     clear: function(){
         this.ctx.save();
 
@@ -96,5 +137,3 @@ app.main = {
         this.ctx.restore();
     }
 }
-
-//window.onload = app.main.init;

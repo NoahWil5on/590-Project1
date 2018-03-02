@@ -13,8 +13,14 @@ function connect(){
 
     //on joining the server, start up game
     socket.on('join', (player) => {
+        console.log("join");
         app.main.host = player.host;
-        app.main.init(player);
+        
+        if(app.main.canvas === undefined){
+            app.main.init(player);
+        }else{
+            app.main.setup(player);
+        }
 
         //update other clients on player and ball information every (lag) milliseconds
         updateInterval = setInterval(() => {

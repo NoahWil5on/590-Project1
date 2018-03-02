@@ -29,9 +29,12 @@ app.main = {
         OVER: "over"
     },
     currentState: undefined,
+    myUpdate: undefined,
+    
 
     //intialize fields, most imporantly reset key values to reset the game
     init: function(player){
+        console.log("word");
         //setup canvas
         this.canvas = document.getElementById('canvas');
         this.canvas.width = this.WIDTH;
@@ -50,18 +53,24 @@ app.main = {
         app.over.init();
 
         this.currentState = this.GAME_STATE.START;
-        this.update();
+        this.myUpdate = this.update.bind(this);
+        this.myUpdate();
     },
     //used for resetting game if necessary
-    setup: function(){
+    setup: function(player){
         this.host = false;
         this.leftScore = 0;
         this.rightScore = 0;
         this.win = false;
         this.room = undefined;
+        
+        app.pong.init(player);
+        app.start.init();
+        app.over.init();
     },
     //route update calls depending on game state and updates various things
-    update: function(){
+    update: function(delta){
+        this.dt = (delta -this.lastUpdate) / 1000;
         //check if the mouse has just been clicked
         if(!this.lastMouse && this.mouseButton){
             this.mouseClick = true;
@@ -69,14 +78,14 @@ app.main = {
             this.mouseClick = false;
         }
         //update delta time
-        this.currentTime = Date.now();
-        this.dt = (this.currentTime - this.lastUpdate)/1000;
+//        this.currentTime = Date.now();
+//        this.dt = (this.currentTime - this.lastUpdate)/1000;
 
         //clear screen
         this.clear();
 
         //bind update to constant frame updates
-        this.animationID = requestAnimationFrame(this.update.bind(this));
+        this.animationID = requestAnimationFrame(this.myUpdate);
 
         //draw thin green strokes across screen to give old age effect
         this.drawStrokes();
@@ -107,7 +116,7 @@ app.main = {
             default: 
                 break;
         }
-        this.lastUpdate = Date.now();
+        this.lastUpdate = delta;
         this.lastMouse = this.mouseButton;
     },
     //draw green strokes across screen

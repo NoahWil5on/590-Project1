@@ -40,7 +40,6 @@ app.over = {
     },
     //restart client
     doReset: function(){
-        app.main.setup();
         init();
     },
     //routes draw calls based on game_state
